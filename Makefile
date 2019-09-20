@@ -5,18 +5,17 @@
 ## Makefile
 ##
 
-# DIR = Challenge01/
+DIRECTORIES	= 	Challenge01	\
+				Challenge02
+				# Challenge03
 
 all:
-	$(MAKE) -C Challenge01
-	$(MAKE) -C Challenge02
+	@for i in $(DIRECTORIES); do $(MAKE) -C $$i all || exit 1; done
 
 clean:
-	$(MAKE) clean -C Challenge01
-	$(MAKE) clean -C Challenge02
+	@for i in $(DIRECTORIES); do $(MAKE) -C $$i clean || exit 1; done
 
 fclean:
-	$(MAKE) fclean -C Challenge01
-	$(MAKE) fclean -C Challenge02
+	@for i in $(DIRECTORIES); do $(MAKE) -C $$i fclean || exit 1; done
 
 .PHONY:	all clean re fclean
