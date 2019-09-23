@@ -6,7 +6,10 @@ import codecs as c
 
 def main():
     with open(sys.argv[1], 'r') as file:
-        sys.stdout.write(c.encode(c.decode(file.read(), 'hex'), 'base64').decode())
+        line = file.read()
+        line = line.replace(" ", "")
+        line = line.replace("\n", "")
+        sys.stdout.write(c.encode(c.decode(line, 'hex'), 'base64').decode())
 
 if __name__ == "__main__":
     try:
