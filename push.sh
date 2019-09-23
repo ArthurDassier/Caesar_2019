@@ -14,4 +14,7 @@ commit_files() {
 upload_files() {
   git remote add origin-epitech git@git.epitech.eu:/arthur.dassier@epitech.eu/SEC_crypto_2019
   git push origin-epitech master
+  echo toto
 }
+
+echo toto2
