@@ -16,7 +16,7 @@ upload_files() {
   git push origin-epitech master
   echo toto
 }
-setup_git()
-commit_files()
-upload_files()
+setup_git
+commit_files
+upload_files
 echo toto2setup_git
