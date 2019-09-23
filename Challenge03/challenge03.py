@@ -51,8 +51,8 @@ import struct
 #     for item in best_score:
 #         print("{}: {}".format(item.title(), best_score[item]))
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
 
 # def main():
 #     with open(sys.argv[1], 'r') as file:
