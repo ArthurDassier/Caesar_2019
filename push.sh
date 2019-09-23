@@ -3,7 +3,7 @@
 setup_git() {
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "Travis CI"
-  git config core.sshCommand "ssh -i ~/.ssh/deploy_rsa -F /dev/null -o CheckHostIP=no"
+  git config core.sshCommand "ssh -i ~/.ssh/deploy_rsa -F /dev/null -o \"StrictHostKeyChecking no\""
 }
 
 commit_files() {
