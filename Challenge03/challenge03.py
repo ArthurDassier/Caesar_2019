@@ -8,63 +8,66 @@ import binascii
 import math
 import struct
 
-# def get_english_score(input_bytes):
-#     """Compares each input byte to a character frequency 
-#     chart and returns the score of a message based on the
-#     relative frequency the characters occur in the English
-#     language
-#     """
-#     character_frequencies = {
-#         'a': .08167, 'b': .01492, 'c': .02782, 'd': .04253,
-#         'e': .12702, 'f': .02228, 'g': .02015, 'h': .06094,
-#         'i': .06094, 'j': .00153, 'k': .00772, 'l': .04025,
-#         'm': .02406, 'n': .06749, 'o': .07507, 'p': .01929,
-#         'q': .00095, 'r': .05987, 's': .06327, 't': .09056,
-#         'u': .02758, 'v': .00978, 'w': .02360, 'x': .00150,
-#         'y': .01974, 'z': .00074, ' ': .13000
-#     }
-#     return sum([character_frequencies.get(chr(byte), 0) for byte in input_bytes.lower()])
+character_frequencies = {
+    'a':  0.08167,
+    'b':  0.01492,
+    'c':  0.02782,
+    'd':  0.04253,
+    'e':  0.1270,
+    'f':  0.02228,
+    'g':  0.02015,
+    'h':  0.06094,
+    'i':  0.06966,
+    'j':  0.00153,
+    'k':  0.00772,
+    'l':  0.04025,
+    'm':  0.02406,
+    'n':  0.06749,
+    'o':  0.07507,
+    'p':  0.01929,
+    'q':  0.00095,
+    'r':  0.05987,
+    's':  0.06327,
+    't':  0.09056,
+    'u':  0.02758,
+    'v':  0.00978,
+    'w':  0.02360,
+    'x':  0.00150,
+    'y':  0.01974,
+    'z':  0.00074,
+}
 
+def find_english_score(input_bytes):
+    english_score = []
+    for byte in input_bytes.lower():
+        actual_score = character_frequencies.get(chr(byte), 0)
+        english_score.append(actual_score)
+    return sum(english_score)
 
-# def single_char_xor(input_bytes, char_value):
-#     """Returns the result of each byte being XOR'd with a single value.
-#     """
-#     output_bytes = b''
-#     for byte in input_bytes:
-#         output_bytes += bytes([byte ^ char_value])
-#     return output_bytes
+def xor_on_char(input_bytes, char_value):
+    final_sentence = b''
+    for index in input_bytes:
+        final_sentence += bytes([operator.xor(index, char_value)])
+    return final_sentence
 
-# def main():
-#     hexstring = '0430272762112D243635233027786204302727262D2F62232C2662012D2D32273023362B2D2C'
-#     ciphertext = binascii.unhexlify(hexstring)
-#     potential_messages = []
-#     for key_value in range(255):
-#         message = single_char_xor(ciphertext, key_value)
-#         score = get_english_score(message)
-#         data = {
-#             'message': message,
-#             'score': score,
-#             'key': key_value
-#             }
-#         potential_messages.append(data)
-#     best_score = sorted(potential_messages, key=lambda x: x['score'], reverse=True)[0]
-#     for item in best_score:
-#         print("{}: {}".format(item.title(), best_score[item]))
+def main():
+    with open(sys.argv[1], 'r') as file:
+        line = file.read()
+        line = line.replace(" ", "")
+        line = line.replace("\n", "")
+        first_text = binascii.unhexlify(line)
+        tab_of_data = []
+        for key_value in range(256):
+            message = xor_on_char(first_text, key_value)
+            score = find_english_score(message)
+            data = {
+                # 'message': message,
+                'score': score,
+                'key': key_value
+                }
+            tab_of_data.append(data)
+        best_score = sorted(tab_of_data, key=lambda x: x['score'], reverse=True)[0]
+        print(format(best_score['key'], 'x'))
 
-# if __name__ == '__main__':
-#     main()
-
-# def main():
-#     with open(sys.argv[1], 'r') as file:
-#         # sys.stdout.write(file.readline())
-#         test = binascii.unhexlify(file.readline())
-#         print(test)
-#         strings = (''.join(chr(num ^ key) for num in test) for key in range(256))
-#         result = max(strings, key=lambda s: s.count(' '))
-#         print(result)
-
-# if __name__ == "__main__":
-#     try:
-#         main()
-#     except Exception:
-#         exit(84)
+if __name__ == '__main__':
+    main()
