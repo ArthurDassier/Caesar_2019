@@ -34,24 +34,20 @@ def xor_on_char(input_bytes, char_value):
     return final_sentence
 
 
-def single_byte_xor():
-    with open(sys.argv[1], 'r') as file:
-        line = file.read()
-        line = line.replace(" ", "")
-        line = line.replace("\n", "")
-        first_text = binascii.unhexlify(line)
-        tab_of_data = []
-        for key_value in range(256):
-            message = xor_on_char(first_text, key_value)
-            score = find_english_score(message)
-            data = {
-                # 'message': message,
-                'score': score,
-                'key': key_value
-                }
-            tab_of_data.append(data)
-        best_score = sorted(tab_of_data, key=lambda x: x['score'], reverse=True)[0]
-        return (format(best_score['key'], 'x'))
+def single_byte_xor(line):
+    first_text = binascii.unhexlify(line)
+    tab_of_data = []
+    for key_value in range(256):
+        message = xor_on_char(first_text, key_value)
+        score = find_english_score(message)
+        data = {
+            # 'message': message,
+            'score': score,
+            'key': key_value
+            }
+        tab_of_data.append(data)
+    best_score = sorted(tab_of_data, key=lambda x: x['score'], reverse=True)[0]
+    return (format(best_score['key'], 'x'))
 
 
 
@@ -65,9 +61,32 @@ def hamming_distance(str_one, str_two):
     return distance
 
 
+def first_guess():
+    with open(sys.argv[1], 'r') as file:
+        line = file.read()
+        line = line.replace(" ", "")
+        line = line.replace("\n", "")
+
+    tab = []
+
+    for keysize in range(5, 41):
+
+        chunks = [line[i:i+keysize] for i in range(0, len(line), keysize)]
+
+        chunk_1 = chunks[0]
+        chunk_2 = chunks[1]
+        distance = hamming_distance(bytes(chunk_1, 'utf-8'), bytes(chunk_2, 'utf-8'))
+        tab.append(((distance / keysize), keysize))
+    #print(min(tab)[1])
+    text_chunks = [line[i:i+round(min(tab)[1])] for i in range(0, len(line), round(min(tab)[1]))]
+    truc = []
+    for elem in text_chunks:
+        truc.append(single_byte_xor(elem))
+    print (*truc, sep='')
+
 def main():
     print(hamming_distance(b'Hello', b'World'))
-    print(single_byte_xor())
+    first_guess()
 
 if __name__ == "__main__":
     #try:
