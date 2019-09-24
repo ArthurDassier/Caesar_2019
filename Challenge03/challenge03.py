@@ -69,5 +69,8 @@ def main():
         best_score = sorted(tab_of_data, key=lambda x: x['score'], reverse=True)[0]
         print(format(best_score['key'], 'x'))
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception:
+        exit(84)
