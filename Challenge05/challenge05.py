@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3.6
 # -*- coding: utf-8 -*-
 
 import sys
@@ -29,10 +29,10 @@ def main():
         line = file.read()
         line = line.replace(" ", "")
         line = line.replace("\n", "")
-        binary = bytes(line, 'utf-8')
-        key = bytes(first_line, 'utf-8')
+        binary = bytes.fromhex(line)
+        key = bytes.fromhex(first_line)
         message = xor_string(binary, key)
-        print(message.hex())
+        print(message.hex().upper())
 
 
 if __name__ == "__main__":
