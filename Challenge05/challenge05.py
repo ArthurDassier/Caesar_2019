@@ -36,7 +36,7 @@ def main():
 
 
 if __name__ == "__main__":
-    #try:
+    try:
         main()
-    #except Exception:
-      #  exit(84)
+    except Exception:
+        exit(84)
