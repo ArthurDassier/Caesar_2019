@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python3.7
 # -*- coding: utf-8 -*-
 
 import sys
@@ -7,6 +7,7 @@ import codecs as c
 import binascii
 import math
 import struct
+
 
 character_frequencies = {
     'a': 0.08167, 'b': 0.01492, 'c': 0.02782, 'd': 0.04253, 'e': 0.1270,
@@ -33,7 +34,7 @@ def xor_on_char(input_bytes, char_value):
     return final_sentence
 
 
-def main():
+def single_byte_xor():
     with open(sys.argv[1], 'r') as file:
         line = file.read()
         line = line.replace(" ", "")
@@ -50,11 +51,26 @@ def main():
                 }
             tab_of_data.append(data)
         best_score = sorted(tab_of_data, key=lambda x: x['score'], reverse=True)[0]
-        print(format(best_score['key'], 'x'))
+        return (format(best_score['key'], 'x'))
 
+
+
+def hamming_distance(str_one, str_two):
+    distance = 0
+
+    for x, y in zip(str_one, str_two):
+        xored = operator.xor(x, y)
+
+        distance += sum([1 for bits in bin(xored) if bits == '1'])
+    return distance
+
+
+def main():
+    print(hamming_distance(b'Hello', b'World'))
+    print(single_byte_xor())
 
 if __name__ == "__main__":
-    try:
+    #try:
         main()
-    except Exception:
-        exit(84)
+    #except Exception:
+    #   exit(84)
