@@ -8,6 +8,7 @@ import binascii
 import math
 import struct
 
+
 character_frequencies = {
         'a': .08167, 'b': .01492, 'c': .02782, 'd': .04253,
         'e': .12702, 'f': .02228, 'g': .02015, 'h': .06094,
@@ -18,6 +19,7 @@ character_frequencies = {
         'y': .01974, 'z': .00074, ' ': .13000
     }
 
+
 def find_english_score(input_bytes):
     english_score = []
     for byte in input_bytes.lower():
@@ -25,45 +27,46 @@ def find_english_score(input_bytes):
         english_score.append(actual_score)
     return sum(english_score)
 
+
 def xor_on_char(input_bytes, char_value):
     final_sentence = b''
     for index in input_bytes:
         final_sentence += bytes([index ^ char_value])
     return final_sentence
 
+
 def single_byte_xor(line):
     tab_of_data = []
     for key_value in range(256):
         message = xor_on_char(line, key_value)
         score = find_english_score(message)
-        data = {
-            'score': score,
-            'key': key_value
-            }
+        data = { 'score': score, 'key': key_value }
         tab_of_data.append(data)
     best_score = sorted(tab_of_data, key=lambda x: x['score'], reverse=True)[0]
     return (best_score)
 
+
 def hamming_distance(str_one, str_two):
     distance = 0
-
     for x, y in zip(str_one, str_two):
         xored = operator.xor(x, y)
         distance += sum([1 for bits in bin(xored) if bits == '1'])
     return distance
 
-def repeating_key_xor(message_bytes, key):
+
+def xor_string(message_bytes, key):
     output_bytes = b''
     index = 0
-    for byte in message_bytes:
-        output_bytes += bytes([byte ^ key[index]])
+    for bytes_index in message_bytes:
+        output_bytes += bytes([operator.xor(bytes_index, key[index])])
         if (index + 1) == len(key):
             index = 0
         else:
             index += 1
     return output_bytes
 
-def first_guess(line):
+
+def find_max_key_possible(line):
     tab = []
     for keysize in range(4, 41):
         chunks = [line[i:i+keysize] for i in range(0, len(line), keysize)]
@@ -71,32 +74,35 @@ def first_guess(line):
             chunk_1 = chunks[0]
             chunk_2 = chunks[1]
             distance = hamming_distance(chunk_1, chunk_2)
-            result = {
-                'key': keysize,
-                'distance': (distance / keysize)
-            }
+            result = { 'key': keysize, 'distance': (distance / keysize) }
             tab.append(result)
         except Exception:
             break
     possible_key_lengths = sorted(tab, key=lambda x: x['distance'])[0]
-    max_key_length_poss = possible_key_lengths['key']
-    possible_plaintext = []
+    return possible_key_lengths['key']
+
+
+def break_repeating_key_XOR(line):
+    max_key_length_poss = find_max_key_possible(line)
+    tab = []
     key = b''
     for i in range(max_key_length_poss):
         block = b''
         for j in range(i, len(line), max_key_length_poss):
             block += bytes([line[j]])
         key += bytes([single_byte_xor(block)['key']])
-        possible_plaintext.append((repeating_key_xor(line, key), key))
-    tab_key = max(possible_plaintext, key=lambda x: find_english_score(x[0]))
+        tab.append((xor_string(line, key), key))
+    tab_key = max(tab, key=lambda x: find_english_score(x[0]))
     print(bytes.hex(tab_key[1]).upper())
+
 
 def main():
     with open(sys.argv[1], 'r') as file:
         line = file.read()
         line = line.replace(" ", "")
         line = line.replace("\n", "")
-    first_guess(bytes.fromhex(line))
+    break_repeating_key_XOR(bytes.fromhex(line))
+
 
 if __name__ == "__main__":
     try:
