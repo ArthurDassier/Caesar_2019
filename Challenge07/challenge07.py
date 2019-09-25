@@ -39,11 +39,11 @@ def main():
         ciphertext = base64.b64decode(ciphertext)
         aestext = AES.new(bytes.fromhex(key), AES.MODE_ECB)
         decrypted = aestext.decrypt(ciphertext)
-        print(unpad(base64.b64encode(decrypted)))
+        print(base64.b64encode(bytes(unpad(decrypted), 'utf-8')).decode("utf-8"))
 
 
 if __name__ == "__main__":
-    #try:
+    try:
         main()
-    #except Exception:
-        #exit(84)
+    except Exception:
+        exit(84)
