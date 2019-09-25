@@ -59,7 +59,10 @@ def main():
     ciphers = open(sys.argv[1]).read().splitlines()
     potential_plaintext = []
     for string in ciphers:
-        first_text = binascii.unhexlify(string)
+        try:
+            first_text = binascii.unhexlify(string)
+        except:
+            first_text = string.encode('utf-8')
         potential_plaintext.append(decode_line(first_text))
     best_line = sorted(potential_plaintext, key=lambda x: x['score'], reverse=True)[0]
     print(format(best_line['key'], 'x'), best_line['line'])

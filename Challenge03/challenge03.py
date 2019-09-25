@@ -38,7 +38,12 @@ def main():
         line = file.read()
         line = line.replace(" ", "")
         line = line.replace("\n", "")
-        first_text = binascii.unhexlify(line)
+        if (len(line) == 0):
+            exit(84)
+        try:
+            first_text = binascii.unhexlify(line)
+        except:
+            first_text = line.encode('utf-8')
         tab_of_data = []
         for key_value in range(256):
             message = xor_on_char(first_text, key_value)
@@ -54,7 +59,7 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
+    # try:
         main()
-    except Exception:
-        exit(84)
+    # except Exception:
+    #     exit(84)
