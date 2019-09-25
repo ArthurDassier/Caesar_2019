@@ -37,6 +37,8 @@ def main():
         ciphertext = ciphertext.replace(" ", "")
         ciphertext = ciphertext.replace("\n", "")
         ciphertext = base64.b64decode(ciphertext)
+        if len(key) == 0 or len(ciphertext) == 0:
+            exit(84)
         aestext = AES.new(bytes.fromhex(key), AES.MODE_ECB)
         decrypted = aestext.decrypt(ciphertext)
         print(base64.b64encode(bytes(unpad(decrypted), 'utf-8')).decode("utf-8"))
