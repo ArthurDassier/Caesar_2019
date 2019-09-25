@@ -5,9 +5,9 @@
 ## Makefile
 ##
 
-NAME	=	challenge05
+NAME	=	challenge06
 
-SRC		=	challenge05.py
+SRC		=	challenge06.py
 
 all:
 	cp $(SRC) ../$(NAME)
