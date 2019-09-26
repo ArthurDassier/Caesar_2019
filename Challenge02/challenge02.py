@@ -12,7 +12,7 @@ def main():
         second_line = file.readline()
         file.seek(0)
         if len(first_line) == len(second_line):
-            sys.stdout.write(str(hex(operator.xor(int(file.readline()[:-1], base=16), int(file.readline(), base=16)))).upper()[2:] + '\n')
+            print(str(hex(operator.xor(int(file.readline()[:-1], base=16), int(file.readline(), base=16)))).upper()[2:])
         else:
             exit(84)
 
