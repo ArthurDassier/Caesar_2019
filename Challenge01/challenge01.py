@@ -10,7 +10,12 @@ def main():
         line = file.read()
         line = line.replace(" ", "")
         line = line.replace("\n", "")
-        sys.stdout.write(c.encode(c.decode(line, 'hex'), 'base64').decode())
+        display = c.encode(c.decode(line, 'hex'), 'base64').decode()
+        display = display.strip()
+        for char in display:
+            if ord(char) != 0 and ord(char) != 10:
+                sys.stdout.write(char)
+        sys.stdout.write('\n')
 
 
 if __name__ == "__main__":
