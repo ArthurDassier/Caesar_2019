@@ -29,6 +29,8 @@ def main():
         line = file.read()
         line = line.replace(" ", "")
         line = line.replace("\n", "")
+        if len(first_line) == 0 or len(line) == 0:
+            exit(84)
         binary = bytes.fromhex(line)
         key = bytes.fromhex(first_line)
         message = xor_string(binary, key)
