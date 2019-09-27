@@ -9,12 +9,14 @@ import math
 import struct
 import base64
 
+
 def chunks_repetition(ciphertext, block_size):
     chunks = []
     for i in range(0, len(ciphertext), block_size):
         chunks += ciphertext[i:i + block_size]
     number_of_repetitions = len(chunks) - len(set(chunks))
     return (ciphertext, number_of_repetitions)
+
 
 def main():
     with open(sys.argv[1], 'r') as file:
@@ -26,7 +28,6 @@ def main():
             ciphertext_decoded.append(base64.b64decode(cipher))
         repetitions = [chunks_repetition(cipher, 16) for cipher in ciphertext_decoded]
         print(ciphertext.index(base64.b64encode(max(repetitions, key=lambda x:x[1])[0]).decode("utf-8")) + 1)
-
 
 
 if __name__ == "__main__":
