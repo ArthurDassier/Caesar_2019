@@ -12,7 +12,8 @@ DIRECTORIES	= 	Challenge01	\
 				Challenge05	\
 				Challenge06	\
 				Challenge07	\
-				Challenge08
+				Challenge08	\
+				Challenge09
 
 all:
 	@for i in $(DIRECTORIES); do $(MAKE) -C $$i all || exit 1; done
